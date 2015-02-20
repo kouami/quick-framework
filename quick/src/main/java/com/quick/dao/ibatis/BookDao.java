@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.quick.dao;
+package com.quick.dao.ibatis;
 
 import java.util.List;
 

@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quick.dao.BookDao;
+import com.quick.dao.ibatis.BookDao;
 import com.quick.entities.Book;
 
 /**

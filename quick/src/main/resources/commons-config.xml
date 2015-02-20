@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<configuration>
+    <countries>
+        <country>
+            <code>gbr</code>
+        </country>
+        <country>
+            <code>ger</code>
+        </country>
+        <country>
+            <code>ita</code>
+        </country>
+        <country>
+            <code>aut</code>
+        </country>
+        <country>
+            <code>che</code>
+        </country>
+        <country>
+            <code>chfr</code>
+        </country>
+        <country>
+            <code>swe</code>
+        </country>
+        <country>
+            <code>esp</code>
+        </country>  
+    </countries>
+</configuration>

@@ -11,11 +11,13 @@ import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -24,7 +26,6 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.google.api.client.util.Value;
 
 /**
  *
@@ -32,44 +33,47 @@ import com.google.api.client.util.Value;
  */
 @Configuration
 @EnableTransactionManagement
-@PropertySource({"classpath:jdbc.properties"})
-@ComponentScan({"com.quick"})
+@PropertySources({
+    @PropertySource("classpath:jdbc.properties")
+})
+@ComponentScan({ "com.quick" })
 public class HibernateConfig extends DBConfig {
 
 	@Autowired
 	private Environment env;
 
-	@Value( "${jdbc.url}" ) 
+	@Value("${jdbc.url}")
 	private String jdbcUrl;
 
-	@Value( "${jdbc.driverClassName}" ) 
+	@Value("${jdbc.driverClassName}")
 	private String driverClassName;
 
-	@Value( "${jdbc.username}" ) 
+	@Value("${jdbc.username}")
 	private String username;
 
-	@Value( "${jdbc.password}" ) 
+	@Value("${jdbc.password}")
 	private String password;
 
-	@Bean(/*initMethod = "setup", destroyMethod = "cleanup"*/)
+	@Bean(/* initMethod = "setup", destroyMethod = "cleanup" */)
 	@Override
 	public DataSource dataSource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
-		ds.setDriverClassName("org.hsqldb.jdbcDriver");
-		ds.setUrl("jdbc:hsqldb:mem://localhost:9500/persondb");
-		ds.setUsername("sa");
-		ds.setPassword("sa");
+		ds.setDriverClassName(driverClassName);
+		ds.setUrl(jdbcUrl);
+		ds.setUsername(username);
+		ds.setPassword(password);
 
 		return ds;
 	}
-
 
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
-		sessionFactory.setPackagesToScan(new String[]{"com.quick.entities"});
-		sessionFactory.setConfigLocations( new ClassPathResource[]{ new ClassPathResource( "hibernate.cfg.xml" ) });
+		sessionFactory.setPackagesToScan(new String[] { "com.quick.entities" });
+		sessionFactory
+		.setConfigLocations(new ClassPathResource[] { new ClassPathResource(
+				"hibernate.cfg.xml") });
 		sessionFactory.setHibernateProperties(hibernateProperties());
 
 		return sessionFactory;
@@ -77,7 +81,8 @@ public class HibernateConfig extends DBConfig {
 
 	@Bean
 	@Autowired
-	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+	public HibernateTransactionManager transactionManager(
+			SessionFactory sessionFactory) {
 		HibernateTransactionManager txManager = new HibernateTransactionManager();
 		txManager.setSessionFactory(sessionFactory);
 		return txManager;
@@ -88,15 +93,18 @@ public class HibernateConfig extends DBConfig {
 		return new PersistenceExceptionTranslationPostProcessor();
 	}
 
-	@Bean
-	public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer(){
-		PropertyPlaceholderConfigurer p = new PropertyPlaceholderConfigurer();
+
+
+	@Bean 
+	public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer(){ 
+		PropertyPlaceholderConfigurer p = new PropertyPlaceholderConfigurer(); 
 		ClassPathResource[] resources = new ClassPathResource[]{ new ClassPathResource( "jdbc.properties" ) };
-		p.setLocations(resources);
-		p.setIgnoreResourceNotFound(true);
-		p.setIgnoreUnresolvablePlaceholders(true);
-		return p;
+	    p.setLocations(resources); p.setIgnoreResourceNotFound(true);
+	    p.setIgnoreUnresolvablePlaceholders(true); 
+	    return p; 
+	    
 	}
+
 
 	@Bean
 	Properties hibernateProperties() {
@@ -104,7 +112,7 @@ public class HibernateConfig extends DBConfig {
 
 		p.setProperty("hibernate.hbm2ddl.auto", "create");
 		p.setProperty("hibernate.connection.autocommit", "true");
-		p.setProperty("hibernate.show_sql","true");
+		p.setProperty("hibernate.show_sql", "true");
 
 		return p;
 	}

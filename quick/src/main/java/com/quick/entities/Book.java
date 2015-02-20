@@ -9,7 +9,7 @@ package com.quick.entities;
  */
 public class Book {
 	
-	private long id;
+	private int id;
 	private String title;
 	private String author;
 	private String isbn;
@@ -17,13 +17,13 @@ public class Book {
 	/**
 	 * @return the id
 	 */
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	/**
